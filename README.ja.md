@@ -16,6 +16,22 @@
   <img src="docs/images/analytics-chart.png" alt="アプリ別バッテリー使用率チャート" width="480">
 </p>
 
+## ダウンロード
+
+ビルド済みバイナリ: **[最新リリース](https://github.com/puffer-dev/mattery/releases/latest)** (Apple Silicon, macOS 13+)
+
+ad-hoc 署名のみで Apple の公証は受けていないため、初回起動時は Gatekeeper にブロックされます。許可手順:
+
+1. zip を展開して `Mattery.app` を `/Applications/` に移動
+2. `Mattery.app` を右クリック → **開く**（または Control + クリック → 開く）
+3. ダイアログで **開く** をクリック。次回以降は警告なし
+
+ターミナルから一括で隔離属性を外すには:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Mattery.app
+```
+
 ## 機能
 
 - 残量を色分けで表示

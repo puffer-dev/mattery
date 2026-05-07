@@ -16,6 +16,22 @@
   <img src="docs/images/analytics-chart.png" alt="앱별 배터리 사용률 차트" width="480">
 </p>
 
+## 다운로드
+
+빌드된 바이너리: **[최신 릴리스](https://github.com/puffer-dev/mattery/releases/latest)** (Apple Silicon, macOS 13+)
+
+ad-hoc 서명만 되어 있고 Apple 공증을 받지 않았기 때문에 첫 실행 시 Gatekeeper 에 차단됩니다. 허용 방법:
+
+1. zip 을 풀고 `Mattery.app` 을 `/Applications/` 로 이동
+2. `Mattery.app` 우클릭 → **열기** (또는 Control + 클릭 → 열기)
+3. 대화상자에서 **열기** 클릭. 이후에는 경고 없음
+
+터미널에서 격리 속성을 한번에 제거하려면:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Mattery.app
+```
+
 ## 기능
 
 - 잔량을 색상으로 표시

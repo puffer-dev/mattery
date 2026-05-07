@@ -16,6 +16,22 @@
   <img src="docs/images/analytics-chart.png" alt="Battery Usage by App chart" width="480">
 </p>
 
+## Download
+
+Pre-built binary: **[latest release](https://github.com/puffer-dev/mattery/releases/latest)** (Apple Silicon, macOS 13+).
+
+The binary is ad-hoc signed, not notarized by Apple, so the first launch is blocked by Gatekeeper. To allow it:
+
+1. Unzip and move `Mattery.app` to `/Applications/`.
+2. Right-click `Mattery.app` → **Open** (or Control-click → Open).
+3. Click **Open** in the dialog. macOS will remember the choice.
+
+Alternatively, strip the quarantine attribute from a terminal:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Mattery.app
+```
+
 ## Features
 
 - Color-coded percentage
