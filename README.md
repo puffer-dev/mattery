@@ -61,3 +61,7 @@ xcodebuild -project Mattery.xcodeproj -scheme Mattery -configuration Debug -dest
 | `AnalyticsWindowController.swift` | `NSWindowController` で SwiftUI ビューをホスト |
 
 `Info.plist` の `LSUIElement = YES` で Dock とアプリスイッチャから外し、メニューバー専用化している。
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE).
