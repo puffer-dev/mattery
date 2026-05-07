@@ -8,6 +8,16 @@
 
 <p align="center"><a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a></p>
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/images/menu.png" alt="Menu bar dropdown" width="280">
+  &nbsp;
+  <img src="docs/images/analytics-chart.png" alt="Battery Usage by App chart" width="480">
+</p>
+
+## Features
+
 - Color-coded percentage
   - 80% and up → green
   - 51–79% → yellow

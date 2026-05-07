@@ -8,6 +8,16 @@
 
 <p align="center"><a href="README.md">English</a> · <a href="README.ko.md">한국어</a></p>
 
+## スクリーンショット
+
+<p align="center">
+  <img src="docs/images/menu.png" alt="メニューバーのドロップダウン" width="280">
+  &nbsp;
+  <img src="docs/images/analytics-chart.png" alt="アプリ別バッテリー使用率チャート" width="480">
+</p>
+
+## 機能
+
 - 残量を色分けで表示
   - 80% 以上 → 緑
   - 51–79% → 黄

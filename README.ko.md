@@ -8,6 +8,16 @@
 
 <p align="center"><a href="README.md">English</a> · <a href="README.ja.md">日本語</a></p>
 
+## 스크린샷
+
+<p align="center">
+  <img src="docs/images/menu.png" alt="메뉴바 드롭다운" width="280">
+  &nbsp;
+  <img src="docs/images/analytics-chart.png" alt="앱별 배터리 사용률 차트" width="480">
+</p>
+
+## 기능
+
 - 잔량을 색상으로 표시
   - 80% 이상 → 초록
   - 51–79% → 노랑
