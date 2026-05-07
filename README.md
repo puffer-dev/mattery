@@ -1,27 +1,30 @@
 # Mattery
 
-macOS のメニューバーにバッテリー残量を色分けで常時表示する常駐アプリ。
+A menu bar app for macOS that always shows your battery percentage with color coding.
 
-- 残量を色分けで表示
-  - 80% 以上 → 緑
-  - 51–79% → 黄
-  - 15–50% → オレンジ
-  - 14% 以下 → 赤
-- 低残量アラート（メニューから 通知 / 音 / 両方 / オフ を選択）
-  - 2–5%: バッテリー駆動中（非充電中）のみ発火
-  - 1% 以下: 充電状態に関わらず発火
-- 充電中はアイコンが稲妻に切り替わり、メニューに `Time to Full` / `Charging…` を表示
-- Launch at Login（`SMAppService.mainApp`）
-- 残量パーセンテージの非表示トグル
-- アプリ別バッテリー使用率分析（過去 24h）
-  - 10 分間隔で `top` の Energy Impact を蓄積
-  - チャート（時間別 stacked bar） / リスト（ソート可能テーブル）の切替
-  - データは `~/Library/Application Support/Mattery/samples.jsonl` に永続化
+[日本語](README.ja.md) | [한국어](README.ko.md)
+
+- Color-coded percentage
+  - 80% and up → green
+  - 51–79% → yellow
+  - 15–50% → orange
+  - 14% and below → red
+- Low-battery alerts (Notification / Sound / Both / Off, selectable from the menu)
+  - 2–5%: only fires when not charging
+  - 1% or below: fires regardless of charging state
+  - Re-fires every 60 seconds while inside the low-battery zone
+- Charging icon (lightning bolt) and `Time to Full` / `Charging…` shown in the menu
+- Launch at Login via `SMAppService.mainApp`
+- Toggle to hide the percentage label
+- Per-app battery usage analytics (rolling 24h)
+  - Samples `top` Energy Impact every 10 minutes
+  - Chart (hourly stacked bars) and list (sortable table) views
+  - Persisted to `~/Library/Application Support/Mattery/samples.jsonl`
 
 ## Requirements
 
-- macOS 13 Ventura 以降
-- Xcode 16 以降 / Swift 5.9
+- macOS 13 Ventura or later
+- Xcode 16+ / Swift 5.9
 - [xcodegen](https://github.com/yonaskolb/XcodeGen)
 
 ## Build
@@ -31,36 +34,36 @@ xcodegen generate
 xcodebuild -project Mattery.xcodeproj -scheme Mattery -configuration Debug -destination 'platform=macOS' build
 ```
 
-または `Mattery.xcodeproj` を Xcode で開いて Run。
+Or open `Mattery.xcodeproj` in Xcode and Run.
 
 ## Release
 
-`/Applications/Mattery.app` に Release ビルドを配置して再起動するスクリプトを用意:
+`scripts/release.sh` builds Release, replaces `/Applications/Mattery.app`, and relaunches it:
 
 ```sh
 ./scripts/release.sh
 ```
 
-走っている Mattery を終了 → Release ビルド → `/Applications` に置換 → 起動、を一発で行う。
+It quits any running instance, builds Release, copies into `/Applications`, re-signs ad-hoc, and launches the new build.
 
 ## Architecture
 
 | File | Role |
 | --- | --- |
-| `MatteryApp.swift` | `@main`。`NSApplicationDelegateAdaptor` で `AppDelegate` を接続、ウィンドウなしの `Settings` シーンのみ |
-| `AppDelegate.swift` | 起動時に `BatteryMonitor` / `LowBatteryAlerter` / `EnergySampler` / `StatusBarController` / `AnalyticsWindowController` を組み立てて保持 |
-| `BatteryStatus.swift` | バッテリー状態の値型 |
-| `BatteryMonitor.swift` | IOPS でスナップショットを取得、`IOPSNotificationCreateRunLoopSource` + 30s ポーリングで購読 |
-| `StatusBarController.swift` | `NSStatusItem` の構築・更新、メニュー組み立て |
-| `LowBatteryAlerter.swift` | 5% / 1% ゾーンへの侵入をライジングエッジ検知して通知・音を発火 |
-| `LaunchAtLoginManager.swift` | `SMAppService.mainApp` ラッパ |
-| `PreferencesStore.swift` | `UserDefaults` ラッパ（`hidePercentage`, `lowAlertMode`） |
-| `EnergySampler.swift` | 5 分間隔で `top -l 2 -s 1 -o power -stats power,command` を実行・パース |
-| `EnergyStore.swift` | サンプルの永続化と 24h ローリング窓集計（アプリ別シェア + 時間別 breakdown） |
-| `AnalyticsView.swift` | SwiftUI でチャート / リスト切替 UI を構築 |
-| `AnalyticsWindowController.swift` | `NSWindowController` で SwiftUI ビューをホスト |
+| `MatteryApp.swift` | `@main`. Connects `AppDelegate` via `NSApplicationDelegateAdaptor`; uses a windowless `Settings` scene |
+| `AppDelegate.swift` | Constructs and retains `BatteryMonitor` / `LowBatteryAlerter` / `EnergySampler` / `StatusBarController` / `AnalyticsWindowController` at launch |
+| `BatteryStatus.swift` | Value type for battery state |
+| `BatteryMonitor.swift` | IOPS snapshot reader; subscribes via `IOPSNotificationCreateRunLoopSource` + 30s polling |
+| `StatusBarController.swift` | Builds and updates the `NSStatusItem`, including its menu |
+| `LowBatteryAlerter.swift` | Detects rising-edge entry into the 5% / 1% zones; fires notification/sound and re-fires every 60s while in zone |
+| `LaunchAtLoginManager.swift` | `SMAppService.mainApp` wrapper |
+| `PreferencesStore.swift` | `UserDefaults` wrapper (`hidePercentage`, `lowAlertMode`) |
+| `EnergySampler.swift` | Runs `top -l 2 -s 1 -o power -stats power,command` every 10 minutes and parses the output |
+| `EnergyStore.swift` | Persists samples and computes the 24h rolling-window aggregates (per-app share + hourly breakdown) |
+| `AnalyticsView.swift` | SwiftUI chart/list toggle UI |
+| `AnalyticsWindowController.swift` | `NSWindowController` hosting the SwiftUI view |
 
-`Info.plist` の `LSUIElement = YES` で Dock とアプリスイッチャから外し、メニューバー専用化している。
+`Info.plist` has `LSUIElement = YES` so the app stays out of the Dock and the app switcher, becoming menu-bar only.
 
 ## License
 
