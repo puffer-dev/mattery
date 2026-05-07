@@ -77,13 +77,17 @@ final class EnergyStore: ObservableObject {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         var loaded: [Sample] = []
+        var sanitised = false
         for line in text.split(separator: "\n") {
-            if let s = try? decoder.decode(Sample.self, from: Data(line.utf8)) {
-                loaded.append(s)
-            }
+            guard let s = try? decoder.decode(Sample.self, from: Data(line.utf8)) else { continue }
+            // Sanitise: top sometimes records absurd power values (negative or huge).
+            let clean = s.entries.filter { $0.v.isFinite && $0.v >= 0 && $0.v <= 10_000 }
+            if clean.count != s.entries.count { sanitised = true }
+            loaded.append(Sample(t: s.t, entries: clean))
         }
         samples = loaded
         trim()
+        if sanitised { persist() }
     }
 
     private func persist() {

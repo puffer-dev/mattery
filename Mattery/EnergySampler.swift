@@ -69,6 +69,9 @@ final class EnergySampler {
             if trimmed.isEmpty { continue }
             let parts = trimmed.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true)
             guard parts.count == 2, let power = Double(parts[0]) else { continue }
+            // top occasionally returns absurd values (negative or huge) for short-lived
+            // helper processes. Drop anything outside a plausible Energy Impact range.
+            if !power.isFinite || power < 0 || power > 10_000 { continue }
             let command = String(parts[1]).trimmingCharacters(in: .whitespaces)
             if command.isEmpty { continue }
             if excludedCommands.contains(command) { continue }
