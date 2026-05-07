@@ -107,6 +107,8 @@ final class EnergyStore: ObservableObject {
         }
     }
 
+    private static let excludedCommands: Set<String> = ["top", "Mattery"]
+
     private func recompute() {
         let snapshot: [Sample] = queue.sync { samples }
         guard !snapshot.isEmpty else {
@@ -120,7 +122,7 @@ final class EnergyStore: ObservableObject {
         var totalsByName: [String: Double] = [:]
         var countsByName: [String: Int] = [:]
         for s in snapshot {
-            for e in s.entries {
+            for e in s.entries where !Self.excludedCommands.contains(e.n) {
                 totalsByName[e.n, default: 0] += e.v
                 countsByName[e.n, default: 0] += 1
             }
@@ -147,7 +149,7 @@ final class EnergyStore: ObservableObject {
         var byHourApp: [Date: [String: Double]] = [:]
         for s in samples {
             let hour = calendar.dateInterval(of: .hour, for: s.t)?.start ?? s.t
-            for e in s.entries {
+            for e in s.entries where !excludedCommands.contains(e.n) {
                 byHourApp[hour, default: [:]][e.n, default: 0] += e.v
             }
         }

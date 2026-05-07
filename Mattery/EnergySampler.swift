@@ -2,7 +2,7 @@ import Foundation
 
 final class EnergySampler {
     private let store: EnergyStore
-    private let interval: TimeInterval = 5 * 60
+    private let interval: TimeInterval = 10 * 60
     private var timer: Timer?
 
     init(store: EnergyStore) {
@@ -48,6 +48,10 @@ final class EnergySampler {
         return parse(text)
     }
 
+    /// Commands to drop from the sample — these are Mattery's own measurement footprint,
+    /// not user-attributable battery usage.
+    private static let excludedCommands: Set<String> = ["top", "Mattery"]
+
     static func parse(_ text: String) -> [(command: String, power: Double)] {
         let lines = text.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
         var lastHeaderIdx: Int?
@@ -67,6 +71,7 @@ final class EnergySampler {
             guard parts.count == 2, let power = Double(parts[0]) else { continue }
             let command = String(parts[1]).trimmingCharacters(in: .whitespaces)
             if command.isEmpty { continue }
+            if excludedCommands.contains(command) { continue }
             entries.append((command, power))
         }
         return entries
