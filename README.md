@@ -1,8 +1,12 @@
-# Mattery
+<p align="center">
+  <img src="docs/images/icon.png" alt="Mattery icon" width="160" height="160">
+</p>
 
-A menu bar app for macOS that always shows your battery percentage with color coding.
+<h1 align="center">Mattery</h1>
 
-[日本語](README.ja.md) | [한국어](README.ko.md)
+<p align="center">A menu bar app for macOS that always shows your battery percentage with color coding.</p>
+
+<p align="center"><a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a></p>
 
 - Color-coded percentage
   - 80% and up → green

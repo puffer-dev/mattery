@@ -1,8 +1,12 @@
-# Mattery
+<p align="center">
+  <img src="docs/images/icon.png" alt="Mattery icon" width="160" height="160">
+</p>
 
-macOS のメニューバーにバッテリー残量を色分けで常時表示する常駐アプリ。
+<h1 align="center">Mattery</h1>
 
-[English](README.md) | [한국어](README.ko.md)
+<p align="center">macOS のメニューバーにバッテリー残量を色分けで常時表示する常駐アプリ。</p>
+
+<p align="center"><a href="README.md">English</a> · <a href="README.ko.md">한국어</a></p>
 
 - 残量を色分けで表示
   - 80% 以上 → 緑

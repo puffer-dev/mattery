@@ -1,8 +1,12 @@
-# Mattery
+<p align="center">
+  <img src="docs/images/icon.png" alt="Mattery icon" width="160" height="160">
+</p>
 
-macOS 메뉴바에 배터리 잔량을 색상으로 항상 표시하는 상주 앱.
+<h1 align="center">Mattery</h1>
 
-[English](README.md) | [日本語](README.ja.md)
+<p align="center">macOS 메뉴바에 배터리 잔량을 색상으로 항상 표시하는 상주 앱.</p>
+
+<p align="center"><a href="README.md">English</a> · <a href="README.ja.md">日本語</a></p>
 
 - 잔량을 색상으로 표시
   - 80% 이상 → 초록
